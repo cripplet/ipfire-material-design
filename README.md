@@ -10,3 +10,4 @@ ipfire-material-design
 
 1. Check `/var/log/httpd/error_log`
 2. Check `/var/ipfire/general-functions.pl`
+3. Run `perl /srv/web/ipfire/cgi-bin/index.cgi`
