@@ -7,7 +7,7 @@ def _WriteIPFireHash(fn, config):
     fp.write('\n'.join(
       [
           '{key}={value}'.format(
-              key=k, value=v
+              key=k.upper(), value=v
           ) for (k, v) in config.iteritems()]
     ))
     
@@ -26,12 +26,12 @@ def _ReadIPFireHash(fn):
   with open(fn) as fp:
     parts = [l.strip().split('=', 1) for l in fp.readlines()]
     return {
-      k: v for (k, v) in parts
+      k.lower(): v for (k, v) in parts
     }
 
 
-def GetIPFireConfig(component):
-  all_components = set([
+def GetIPFireConfig():
+  components = set([
       'ddns',
       'ethernet',
       'firewall',
@@ -42,24 +42,12 @@ def GetIPFireConfig(component):
       'remote',
       'vpn'])
 
-  if component and component not in all_components:
-    return {}
-
-  if component:
-    components = set([component])
-  else:
-    components = set(all_components)
-
-  config = {}
-
   with open('config/ipfire_shim.json') as fp:
     ipfire_shim = json.loads(fp.read())
 
-  config.update({
+  return {
       c: _ReadIPFireHash(
           '{ipfire_root}/{component}/settings'.format(
               ipfire_root=ipfire_shim['ipfire_root'],
               component=c)) for c in components
-  })
-
-  return config
+  }

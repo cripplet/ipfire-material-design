@@ -4,15 +4,15 @@ import json
 import re
 from http import server
 
-from lib.handlers import component_list_handler
+from lib.handlers import settings_handler
 from lib.handlers import method_not_allowed_handler
 from lib.handlers import not_found_handler
  
 
 ROUTES = [
     (
-        r'^/api/(?P<component>(\w+)?$)',
-        component_list_handler.component_list_handler),
+        r'^/api/settings/(?P<component>(\w+)?)(/?)((?P<property>\w+)(/?))?$',
+        settings_handler.settings_handler),
     (r'.*', not_found_handler.not_found_handler),
 ]
 

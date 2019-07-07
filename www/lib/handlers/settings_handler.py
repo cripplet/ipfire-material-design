@@ -6,10 +6,21 @@ from lib.handlers import not_found_handler
 from lib.handlers import method_not_allowed_handler
 
 
-def component_list_handler(handler, component):
+def settings_handler(handler, component, property):
   if handler.command == 'GET':
-    content = ipfire_config.GetIPFireConfig(component)
-    if content:
+    config = ipfire_config.GetIPFireConfig()
+    content = None
+    if not component:
+      content = config
+    elif (
+        component and
+        component in config and
+        property and
+        property in config[component]):
+      content = config[component][property]
+    elif component and component in config and not property:
+      content = config[component]
+    if content is not None:
       return handler.respond(
           http.HTTPStatus.OK,
           {'Content-type': 'text/plain'},
