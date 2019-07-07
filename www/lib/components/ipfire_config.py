@@ -1,5 +1,7 @@
 import json
 
+from lib.components import shared
+
 
 def _WriteIPFireHash(fn, config):
   """Writes config dict into K=V format."""
@@ -30,24 +32,46 @@ def _ReadIPFireHash(fn):
     }
 
 
+def _GetSystemConfig():
+  return {
+      'ipfire': shared.GetSysOutput('cat /etc/system-release'),
+      'kernel': shared.GetSysOutput('uname -a'),
+      'pakfire': shared.GetSysOutput(
+          'cat /opt/pakfire/etc/pakfire.conf | '
+          'grep "version =" | cut -d\\" -f2'),
+  }
+
+
+def _GetFireInfoConfig():
+  return json.loads(shared.GetSysOutput('cat /var/ipfire/fireinfo/profile'))
+  
+
 def GetIPFireConfig():
-  components = set([
-      'ddns',
-      'ethernet',
-      'firewall',
-      'main',
-      'modem',
-      'ppp',
-      'proxy',
-      'remote',
-      'vpn'])
+  static_components = set([
+     shared.Component.DDNS,
+     shared.Component.ETHERNET,
+     shared.Component.FIREWALL,
+     shared.Component.MAIN,
+     shared.Component.MODEM,
+     shared.Component.PPP,
+     shared.Component.PROXY,
+     shared.Component.REMOTE,
+     shared.Component.VPN,
+  ])
 
   with open('config/ipfire_shim.json') as fp:
     ipfire_shim = json.loads(fp.read())
 
-  return {
+  config = {
       c: _ReadIPFireHash(
           '{ipfire_root}/{component}/settings'.format(
               ipfire_root=ipfire_shim['ipfire_root'],
-              component=c)) for c in components
+              component=c)) for c in static_components
   }
+
+  config.update({
+      shared.Component.SYS: _GetSystemConfig(),
+      shared.Component.FIREINFO: _GetFireInfoConfig(),
+  })
+
+  return config

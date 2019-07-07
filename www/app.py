@@ -1,18 +1,29 @@
 #! /usr/bin/python3
 
+import functools
 import json
 import re
 from http import server
 
 from lib.handlers import settings_handler
+from lib.handlers import status_handler
 from lib.handlers import method_not_allowed_handler
 from lib.handlers import not_found_handler
  
 
 ROUTES = [
     (
-        r'^/api/rest/settings/(?P<component>(\w+)?)(/?)((?P<property>\w+)(/?))?$',
+        r'^/api/rest/settings$',
+        functools.partial(settings_handler.settings_handler, **{'path': ''})),
+    (
+        r'^/api/rest/status$',
+        functools.partial(status_handler.status_handler, **{'path': ''})),
+    (
+        r'^/api/rest/settings/(?P<path>(\w+/?)*)/?$',
         settings_handler.settings_handler),
+    (
+        r'^/api/rest/status/(?P<path>(\w+/?)*)/?$',
+        status_handler.status_handler),
     (r'.*', not_found_handler.not_found_handler),
 ]
 
@@ -29,7 +40,9 @@ class Router(server.BaseHTTPRequestHandler):
     for (r, h) in ROUTES:
       m = re.match(r, self.path)
       if m is not None:
-        return h(self, **m.groupdict())
+        return h(
+            **m.groupdict(),
+            handler=self)
 
   def do_DELETE(self):
     return self._route()
