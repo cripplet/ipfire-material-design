@@ -1,11 +1,8 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 
-
-import BaseHTTPServer
-import httplib
 import json
 import re
-import SimpleHTTPServer
+from http import server
 
 from lib.handlers import component_list_handler
 from lib.handlers import method_not_allowed_handler
@@ -14,19 +11,19 @@ from lib.handlers import not_found_handler
 
 ROUTES = [
     (
-        r'^/api/(?P<component>(\w+)?)',
+        r'^/api/(?P<component>(\w+)?$)',
         component_list_handler.component_list_handler),
     (r'.*', not_found_handler.not_found_handler),
 ]
 
 
-class Router(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class Router(server.BaseHTTPRequestHandler):
   def respond(self, resp_code, headers, content):
     self.send_response(resp_code)
-    for (k, v) in headers.iteritems():
+    for (k, v) in headers.items():
       self.send_header(k, v)
     self.end_headers()
-    self.wfile.write(content)
+    self.wfile.write(bytes(content, 'utf-8'))
 
   def _route(self):
     for (r, h) in ROUTES:
@@ -57,7 +54,7 @@ def main():
   with open('config/debug.json') as fp:
     debug_config = json.loads(fp.read())
 
-  httpd = BaseHTTPServer.HTTPServer(('', 8080), Router)
+  httpd = server.HTTPServer(('', 8080), Router)
   try:
     httpd.serve_forever()
   except KeyboardInterrupt:
