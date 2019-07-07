@@ -3,8 +3,9 @@ ipfire-material-design
 
 ## Installation
 
-1. Clone directory into `/srv/web/ipfire/html/themes/${THEME_NAME}`
-1. Change the `THEME` directive in `/var/ipfire/main/settings` to `${THEME_NAME}`
+1. Add `vhost.conf` to `/etc/httpd/conf/vhosts.d/`
+1. Add relevant port (`Listen 8080`) to `/etc/httpd/conf/listen.conf`
+1. Restart Apache `sudo /etc/init.d/apache restart`
 
 ## Debugging
 
