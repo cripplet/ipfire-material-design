@@ -3,12 +3,15 @@ ipfire-material-design
 
 ## Installation
 
-1. Add `vhost.conf` to `/etc/httpd/conf/vhosts.d/`
-1. Add relevant port (`Listen 8080`) to `/etc/httpd/conf/listen.conf`
-1. Restart Apache `sudo /etc/init.d/apache restart`
+1. Start `app.py` upon startup
+
+## IPFire Layout
+
+* `/var/ipfire/${COMPONENT}/` contains general introspective Perl scripts
+* `/srv/web/ipfire/cgi-bin/` contains frontend / rendering code
 
 ## Debugging
 
 1. Check `/var/log/httpd/error_log`
-2. Check `/var/ipfire/general-functions.pl`
-3. Run `perl /srv/web/ipfire/cgi-bin/index.cgi`
+1. Check `/var/ipfire/general-functions.pl`
+1. Run `perl /srv/web/ipfire/cgi-bin/index.cgi`
