@@ -11,7 +11,7 @@ from lib.handlers import not_found_handler
 
 ROUTES = [
     (
-        r'^/api/settings/(?P<component>(\w+)?)(/?)((?P<property>\w+)(/?))?$',
+        r'^/api/rest/settings/(?P<component>(\w+)?)(/?)((?P<property>\w+)(/?))?$',
         settings_handler.settings_handler),
     (r'.*', not_found_handler.not_found_handler),
 ]
