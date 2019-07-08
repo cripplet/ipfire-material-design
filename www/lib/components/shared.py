@@ -13,6 +13,7 @@ class Component(object):
   VPN = 'vpn'
   SYS = 'sys'
   FIREINFO = 'fireinfo'
+  VULNERABILITY = 'vulnerability'
 
 
 def GetSysOutput(cmd):

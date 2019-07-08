@@ -9,6 +9,65 @@ from lib.components import shared
 
 SSHKey = namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
 SSHSession = namedtuple('SSHSession', ['username', 'active_since', 'ip'])
+VulnerabilityLookup = namedtuple('VulnerabilityLookup', [
+    'description',
+    'cves'])
+KnownVulnerability = namedtuple('KnownVulnerability', [
+    'name',
+    'description',
+    'cves',
+    'vulnerability_status',
+    'vulnerability_description',
+])
+
+_VULNERABILITY_STATUS = {
+    'Not affected': 'NOT_AFFECTED',
+    'Vulnerability: ': 'VULNERABLE',
+    'Mitigation: ': 'MITIGATED',
+}
+
+_VULNERABILITIES = {
+    'l1tf': VulnerabilityLookup(
+        description='Foreshadow',
+        cves=['CVE-2018-3620'],
+    ),
+    'mds': VulnerabilityLookup(
+        description='Fallout/ZombieLoad/RIDL',
+        cves=['CVE-2018-12126', 'CVE-2018-12130', 'CVE-2018-12127', 'CVE-2019-11091']
+    ),
+    'meltdown': VulnerabilityLookup(
+        description='Meltdown',
+        cves=['CVE-2017-5754'],
+    ),
+    'spec_store_bypass': VulnerabilityLookup(
+        description='Spectre Variant 4',
+        cves=['CVE-2018-3639'],
+    ),
+    'spectre_v1': VulnerabilityLookup(
+        description='Spectre Variant 1',
+        cves=['CVE-2017-5753'],
+    ),
+    'spectre_v2': VulnerabilityLookup(
+        description='Spectre Variant 2',
+        cves=['CVE-2017-5715'],
+    ),
+}
+
+
+def _GenerateVulnerabilities():
+  c = []
+  vuln_dir = '/sys/devices/system/cpu/vulnerabilities/'
+  for v in os.listdir(vuln_dir):
+    data = shared.GetSysOutput(
+        'cat {path}'.format(path=os.path.join(vuln_dir, v)))
+    m = re.match('^(?P<status>(Not affected|Vulnerable: |Mitigation: ))(?P<description>.*)$', data)
+    c.append(KnownVulnerability(
+        name=v,
+        vulnerability_status=_VULNERABILITY_STATUS[m.groupdict().get('status', '')],
+        vulnerability_description=m.groupdict().get('description', ''),
+        **_VULNERABILITIES.get(v, VulnerabilityLookup(description='', cves=[]))._asdict()
+    )._asdict())
+  return c
 
 
 def _GenerateSSHSessions():
@@ -54,5 +113,5 @@ def GetStatuses():
         'keys': _GenerateSSHKeys(),
         'sessions': _GenerateSSHSessions(),
     },
+    shared.Component.VULNERABILITY: _GenerateVulnerabilities(),
   }
-
