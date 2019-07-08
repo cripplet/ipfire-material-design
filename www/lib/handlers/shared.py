@@ -1,3 +1,4 @@
+import flask
 import http
 import json
 
@@ -10,20 +11,21 @@ def _traverse_dict(d, path):
   for p in path.split('/'):
     if not p:
       break
+    if not (isinstance(d, list) or isinstance(d, dict)):
+      raise IndexError
     try:
       d = d[p]
-    except TypeError:
+    except (KeyError, TypeError):
       d = d[int(p)]
   return d
 
 
-def config_handler(path, config, handler):
-  if handler.command == 'GET':
-    try:
-      return handler.respond(
-          http.HTTPStatus.OK,
-          {'Content-type': 'text/plain'},
-          json.dumps(_traverse_dict(config, path), indent=4))
-    except (KeyError, IndexError):
-      return not_found_handler.not_found_handler(handler)
-  return method_not_allowed_handler.method_not_allowed_handler(handler)
+def config_handler(path, config):
+  try:
+    return flask.Response(
+        response=json.dumps(_traverse_dict(config, path), indent=4),
+        status=http.HTTPStatus.OK,
+        mimetype='application/json',
+    )
+  except (KeyError, IndexError, ValueError):
+    return not_found_handler.not_found_handler()
