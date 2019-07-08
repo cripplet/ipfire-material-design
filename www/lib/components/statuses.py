@@ -1,14 +1,29 @@
 from collections import namedtuple
+
+import datetime
 import os
+import re
 
 from lib.components import shared
 
 
 SSHKey = namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
+SSHSession = namedtuple('SSHSession', ['username', 'active_since', 'ip'])
 
 
-def _ConstructSSHKey(fn):
-  return SSHKey()._asdict()
+def _GenerateSSHSessions():
+  return [
+      SSHSession(
+          username=username,
+          active_since=str(
+              datetime.datetime.strptime(
+                  '{date} {time}'.format(date=date_since, time=time_since),
+                  '%Y-%m-%d %H:%M')),
+          ip=ip.strip('()'),
+      )._asdict() for (username, _, date_since, time_since, ip) in [
+        l.split() for l in shared.GetSysOutput('who -s').split('\n')
+      ]
+  ]
 
 
 def _GenerateSSHKeys():
@@ -37,6 +52,7 @@ def GetStatuses():
   return {
     shared.Component.REMOTE: {
         'keys': _GenerateSSHKeys(),
+        'sessions': _GenerateSSHSessions(),
     },
   }
 
