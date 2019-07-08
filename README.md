@@ -5,7 +5,7 @@ ipfire-material-design
 
 1. Install Python[3] `distutils`: `pakfire install python-distutils`
 1. Install `pip`: `python3 -m ensurepip --upgrade`
-1. Download relevant packages (`flask`) by installing from source: `sudo python3 setup.py install`
+1. Download relevant packages (`requirements.txt`) by installing from source: `sudo python3 setup.py install`
 1. Run the Python server: `python3 server.py`
 
 ## IPFire Layout

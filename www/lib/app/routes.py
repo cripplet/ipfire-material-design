@@ -1,5 +1,6 @@
 import collections
 
+from lib.handlers import data_frequency_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
 
@@ -23,29 +24,36 @@ def _CreateRoute(
 
 ROUTES = [
     _CreateRoute(
+        rule='/api/rest/data/frequency/<path:path>',
+        endpoint='api.rest.data.frequency.path',
+        view_func=data_frequency_handler.data_frequency_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/frequency',
+        endpoint='api.rest.data.frequency',
+        view_func=data_frequency_handler.data_frequency_handler,
+        defaults={'path': ''},
+    ),
+    _CreateRoute(
         rule='/api/rest/settings/<path:path>',
-        endpoint='settings_with_path',
+        endpoint='api.rest.settings.path',
         view_func=settings_handler.settings_handler,
     ),
     _CreateRoute(
         rule='/api/rest/settings/',
-        endpoint='settings_without_path',
+        endpoint='api.rest.settings',
         view_func=settings_handler.settings_handler,
-        defaults={
-            'path': '',
-        }
+        defaults={'path': ''},
     ),
     _CreateRoute(
         rule='/api/rest/status/<path:path>',
-        endpoint='status_with_path',
+        endpoint='api.rest.status.path',
         view_func=status_handler.status_handler,
     ),
     _CreateRoute(
         rule='/api/rest/status/',
-        endpoint='status_without_path',
+        endpoint='api.rest.status',
         view_func=status_handler.status_handler,
-        defaults={
-            'path': '',
-        }
+        defaults={'path': ''},
     ),
 ]
