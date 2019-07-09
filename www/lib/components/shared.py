@@ -14,6 +14,7 @@ class Component(object):
   SYS = 'sys'
   FIREINFO = 'fireinfo'
   VULNERABILITY = 'vulnerability'
+  CONNECTIONS = 'connections'
 
 
 def get_sys_output(cmd):
