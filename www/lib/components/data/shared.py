@@ -19,13 +19,13 @@ def GetCoreCount():
   return int(shared.GetSysOutput('cat /proc/cpuinfo | grep processor | wc -l'))
 
 
-def GetLoggedProcesses():
-  root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
+def GetLoggedMembers(path_pattern):
   return [
       re.match(
-          '^{root}/collectd/localhost/processes-(?P<process>.*)$'.format(
-              root=root), d).groupdict()['process']
-      for d in shared.GetSysOutput(
-          'ls -dA {root}/collectd/localhost/processes-*'.format(
-              root=root)).split('\n')
+          '^{path_pattern}(?P<member>)$'.format(path_pattern=path_pattern),
+          d
+      ).groupdict()['member'] for d in shared.GetSysOutput(
+          'ls -dA {path_pattern}*'.format(
+          path_pattern=path_pattern)
+      ).split('\n')
   ]
