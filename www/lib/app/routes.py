@@ -9,6 +9,7 @@ from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
 from lib.handlers import swap_usage_handler
+from lib.handlers import version_handler
 
 _Route = collections.namedtuple('Route', [
     'rule', 'endpoint', 'view_func', 'provide_automatic_options', 'options'])
@@ -80,13 +81,18 @@ ROUTES = [
         view_func=cpu_frequency_handler.cpu_frequency_handler,
     ),
     _create_route(
-        rule='/api/rest/settings/',
-        endpoint='api.rest.settings',
+        rule='/api/rest/config/settings/',
+        endpoint='api.rest.config.settings',
         view_func=settings_handler.settings_handler,
     ),
     _create_route(
-        rule='/api/rest/status/',
-        endpoint='api.rest.status',
+        rule='/api/rest/config/status/',
+        endpoint='api.rest.config.status',
         view_func=status_handler.status_handler,
+    ),
+    _create_route(
+        rule='/api/rest/config/version/',
+        endpoint='api.rest.config.version',
+        view_func=version_handler.version_handler,
     ),
 ]
