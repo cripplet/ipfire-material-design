@@ -5,19 +5,20 @@ from lib.components import shared
 from lib.components.data import shared as shared_data
 
 
-def GetCPUFrequencyData(step):
+def GetRAMUsageData(step):
   root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
   command = shared_data.GetRRDCommandArgs(
       start_time=step * 20,
       step=step
   ) + sum([
       [
-          'DEF:cpu{core}={root}/collectd/localhost/cpufreq/cpufreq-{core}.rrd:value:AVERAGE'.format(
-              core=i,
+          'DEF:{metric}={root}/collectd/localhost/memory/memory-{metric}.rrd:value:AVERAGE'.format(
+              metric=metric,
               root=root),
-          'XPORT:cpu{core}:cpu{core}'.format(core=i),
-      ] for i in range(shared_data.GetCoreCount())
+          'XPORT:{metric}:{metric}'.format(metric=metric),
+      ] for metric in ['used', 'free', 'buffered', 'cached']
   ], [])
   return json.loads(
     shared.GetSysOutput(' '.join(command))
   )
+

@@ -1,6 +1,7 @@
 import collections
 
 from lib.handlers import cpu_frequency_handler
+from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
 
@@ -24,13 +25,24 @@ def _CreateRoute(
 
 ROUTES = [
     _CreateRoute(
+        rule='/api/rest/data/ram/usage/<path:path>',
+        endpoint='api.rest.data.ram.usage.path',
+        view_func=ram_usage_handler.ram_usage_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/ram/usage/',
+        endpoint='api.rest.data.ram.usage',
+        view_func=ram_usage_handler.ram_usage_handler,
+        defaults={'path': ''},
+    ),
+    _CreateRoute(
         rule='/api/rest/data/cpu/frequency/<path:path>',
-        endpoint='api.rest.data.frequency.path',
+        endpoint='api.rest.data.cpu.frequency.path',
         view_func=cpu_frequency_handler.cpu_frequency_handler,
     ),
     _CreateRoute(
         rule='/api/rest/data/cpu/frequency/',
-        endpoint='api.rest.data.frequency',
+        endpoint='api.rest.data.cpu.frequency',
         view_func=cpu_frequency_handler.cpu_frequency_handler,
         defaults={'path': ''},
     ),
