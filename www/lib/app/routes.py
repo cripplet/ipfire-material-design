@@ -1,6 +1,7 @@
 import collections
 
 from lib.handlers import cpu_frequency_handler
+from lib.handlers import processes_cpu_time_handler
 from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
@@ -25,6 +26,17 @@ def _CreateRoute(
 
 
 ROUTES = [
+    _CreateRoute(
+        rule='/api/rest/data/processes/cpu/time/<path:path>',
+        endpoint='api.rest.data.processes.cpu.time.path',
+        view_func=processes_cpu_time_handler.processes_cpu_time_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/processes/cpu/time/',
+        endpoint='api.rest.data.processes.cpu.time',
+        view_func=processes_cpu_time_handler.processes_cpu_time_handler,
+        defaults={'path': ''},
+    ),
     _CreateRoute(
         rule='/api/rest/data/swap/usage/<path:path>',
         endpoint='api.rest.data.swap.usage.path',
