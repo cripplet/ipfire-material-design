@@ -5,4 +5,4 @@ from lib.handlers import shared
 def cpu_frequency_handler(path):
   return shared.config_handler(
       path,
-      cpu_frequency.GetCPUFrequencyData(step=30))
+      cpu_frequency.get_cpu_frequency_data(step=30))

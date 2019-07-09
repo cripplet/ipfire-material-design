@@ -54,11 +54,11 @@ _VULNERABILITIES = {
 }
 
 
-def _GenerateVulnerabilities():
+def _generate_vulnerabilities():
   c = []
   vuln_dir = '/sys/devices/system/cpu/vulnerabilities/'
   for v in os.listdir(vuln_dir):
-    data = shared.GetSysOutput(
+    data = shared.get_sys_output(
         'cat {path}'.format(path=os.path.join(vuln_dir, v)))
     m = re.match('^(?P<status>(Not affected|Vulnerable: |Mitigation: ))(?P<description>.*)$', data)
     c.append(KnownVulnerability(
@@ -70,7 +70,7 @@ def _GenerateVulnerabilities():
   return c
 
 
-def _GenerateSSHSessions():
+def _generate_ssh_sessions():
   return [
       SSHSession(
           username=username,
@@ -80,20 +80,20 @@ def _GenerateSSHSessions():
                   '%Y-%m-%d %H:%M')),
           ip=ip.strip('()'),
       )._asdict() for (username, _, date_since, time_since, ip) in [
-        l.split() for l in shared.GetSysOutput('who -s').split('\n')
+        l.split() for l in shared.get_sys_output('who -s').split('\n')
       ]
   ]
 
 
-def _GenerateSSHKeys():
+def _generate_ssh_keys():
   return [
       SSHKey(
           file=fn,
           type=type,
-          size=int(shared.GetSysOutput(
+          size=int(shared.get_sys_output(
               '/usr/bin/ssh-keygen -lf {file}  | cut -d" " -f1'.format(
                   file=fn))),
-          fingerprint=shared.GetSysOutput(
+          fingerprint=shared.get_sys_output(
               '/usr/bin/ssh-keygen -lf {file}  | cut -d" " -f2'.format(
                   file=fn)),
       )._asdict() for (fn, type) in set([
@@ -107,11 +107,11 @@ def _GenerateSSHKeys():
   ]
 
 
-def GetStatuses():
+def get_statuses():
   return {
     shared.Component.REMOTE: {
-        'keys': _GenerateSSHKeys(),
-        'sessions': _GenerateSSHSessions(),
+        'keys': _generate_ssh_keys(),
+        'sessions': _generate_ssh_sessions(),
     },
-    shared.Component.VULNERABILITY: _GenerateVulnerabilities(),
+    shared.Component.VULNERABILITY: _generate_vulnerabilities(),
   }

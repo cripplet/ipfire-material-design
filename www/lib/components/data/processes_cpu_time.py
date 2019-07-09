@@ -5,17 +5,17 @@ from lib.components import shared
 from lib.components.data import shared as shared_data
 
 
-def GetProcessesCPUTimeData(step):
-  root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
+def get_processes_cpu_time_data(step):
+  root = ipfire_config.get_ipfire_config()['main']['rrdlog']
   subpath_pattern = 'collectd/localhost/processes-'
 
-  processes = shared_data.GetLoggedMembers(
+  processes = shared_data.get_logged_members(
       '{root}/{subpath_pattern}'.format(
           root=root,
           subpath_pattern=subpath_pattern)
   )
 
-  command = shared_data.GetRRDCommandArgs(
+  command = shared_data.get_rrd_command_args(
       start_time=step * 20,
       step=step
   ) + sum([
@@ -35,5 +35,5 @@ def GetProcessesCPUTimeData(step):
       ] for p in processes
   ], [])
   return json.loads(
-    shared.GetSysOutput(' '.join(command))
+    shared.get_sys_output(' '.join(command))
   )

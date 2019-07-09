@@ -3,4 +3,4 @@ from lib.handlers import shared
 
 
 def settings_handler(path):
-  return shared.config_handler(path, ipfire_config.GetIPFireConfig())
+  return shared.config_handler(path, ipfire_config.get_ipfire_config())

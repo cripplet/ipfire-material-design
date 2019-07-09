@@ -3,4 +3,4 @@ from lib.handlers import shared
 
 
 def status_handler(path):
-  return shared.config_handler(path, statuses.GetStatuses())
+  return shared.config_handler(path, statuses.get_statuses())

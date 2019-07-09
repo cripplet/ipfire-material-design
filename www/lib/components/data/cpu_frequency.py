@@ -5,9 +5,9 @@ from lib.components import shared
 from lib.components.data import shared as shared_data
 
 
-def GetCPUFrequencyData(step):
-  root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
-  command = shared_data.GetRRDCommandArgs(
+def get_cpu_frequency_data(step):
+  root = ipfire_config.get_ipfire_config()['main']['rrdlog']
+  command = shared_data.get_rrd_command_args(
       start_time=step * 20,
       step=step
   ) + sum([
@@ -16,8 +16,8 @@ def GetCPUFrequencyData(step):
               core=i,
               root=root),
           'XPORT:cpu{core}:cpu{core}'.format(core=i),
-      ] for i in range(shared_data.GetCoreCount())
+      ] for i in range(shared_data.get_core_count())
   ], [])
   return json.loads(
-    shared.GetSysOutput(' '.join(command))
+    shared.get_sys_output(' '.join(command))
   )

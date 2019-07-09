@@ -5,4 +5,4 @@ from lib.handlers import shared
 def processes_ram_usage_handler(path):
   return shared.config_handler(
       path,
-      processes_ram_usage.GetProcessesRAMUsageData(step=30))
+      processes_ram_usage.get_processes_ram_usage_data(step=30))

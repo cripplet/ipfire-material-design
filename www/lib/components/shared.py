@@ -16,6 +16,6 @@ class Component(object):
   VULNERABILITY = 'vulnerability'
 
 
-def GetSysOutput(cmd):
+def get_sys_output(cmd):
   with os.popen(cmd, 'r') as fp:
     return fp.read().strip()

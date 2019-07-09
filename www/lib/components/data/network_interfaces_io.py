@@ -8,11 +8,11 @@ from lib.components.data import shared as shared_data
 _NETWORK_DATA_SUBPATH_PATTERN = 'collectd/localhost/interface/if_octets-'
 
 
-def GetNetworkInterfaces():
-  root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
+def get_network_interfaces():
+  root = ipfire_config.get_ipfire_config()['main']['rrdlog']
   return [
       i.split('.')[0] for i in
-      shared_data.GetLoggedMembers(
+      shared_data.get_logged_members(
           '{root}/{subpath_pattern}'.format(
               root=root,
               subpath_pattern=_NETWORK_DATA_SUBPATH_PATTERN)
@@ -20,9 +20,9 @@ def GetNetworkInterfaces():
   ]
   
 
-def GetNetworkInterfacesIOData(interface, step):
-  root = ipfire_config.GetIPFireConfig()['main']['rrdlog']
-  command = shared_data.GetRRDCommandArgs(
+def get_network_interfaces_io_data(interface, step):
+  root = ipfire_config.get_ipfire_config()['main']['rrdlog']
+  command = shared_data.get_rrd_command_args(
       start_time=step * 20,
       step=step
   ) + [
@@ -38,5 +38,5 @@ def GetNetworkInterfacesIOData(interface, step):
       'XPORT:tx:tx',
   ]
   return json.loads(
-    shared.GetSysOutput(' '.join(command))
+    shared.get_sys_output(' '.join(command))
   )
