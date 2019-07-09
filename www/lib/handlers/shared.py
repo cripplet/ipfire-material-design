@@ -7,7 +7,6 @@ from lib.handlers import not_found_handler
 
 
 def _traverse_dict(d, path):
-  d = dict(d)
   for p in path.split('/'):
     if not p:
       break

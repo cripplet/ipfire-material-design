@@ -1,6 +1,3 @@
-import http
-import json
-
 from lib.components.data import ram_usage
 from lib.handlers import shared
 

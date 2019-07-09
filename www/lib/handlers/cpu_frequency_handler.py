@@ -1,6 +1,3 @@
-import http
-import json
-
 from lib.components.data import cpu_frequency
 from lib.handlers import shared
 

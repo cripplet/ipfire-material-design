@@ -22,7 +22,7 @@ def GetCoreCount():
 def GetLoggedMembers(path_pattern):
   return [
       re.match(
-          '^{path_pattern}(?P<member>)$'.format(path_pattern=path_pattern),
+          '^{path_pattern}(?P<member>.*)$'.format(path_pattern=path_pattern),
           d
       ).groupdict()['member'] for d in shared.GetSysOutput(
           'ls -dA {path_pattern}*'.format(

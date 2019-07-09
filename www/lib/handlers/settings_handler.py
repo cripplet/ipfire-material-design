@@ -1,5 +1,3 @@
-import flask
-
 from lib.components import ipfire_config
 from lib.handlers import shared
 

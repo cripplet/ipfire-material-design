@@ -1,6 +1,7 @@
 import collections
 
 from lib.handlers import cpu_frequency_handler
+from lib.handlers import network_interfaces_io_handler
 from lib.handlers import processes_cpu_time_handler
 from lib.handlers import processes_ram_usage_handler
 from lib.handlers import ram_usage_handler
@@ -27,6 +28,28 @@ def _CreateRoute(
 
 
 ROUTES = [
+    _CreateRoute(
+        rule='/api/rest/data/networks/interfaces/<path:path>',
+        endpoint='api.rest.data.networks.interfaces.path',
+        view_func=network_interfaces_io_handler.network_interfaces_list_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/networks/interfaces/',
+        endpoint='api.rest.data.networks.interfaces',
+        view_func=network_interfaces_io_handler.network_interfaces_list_handler,
+        defaults={'path': ''},
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/networks/io/<string:interface>/<path:path>',
+        endpoint='api.rest.data.networks.io.interface.path',
+        view_func=network_interfaces_io_handler.network_interfaces_io_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/networks/io/<string:interface>/',
+        endpoint='api.rest.data.networks.io.interface',
+        view_func=network_interfaces_io_handler.network_interfaces_io_handler,
+        defaults={'path': ''},
+    ),
     _CreateRoute(
         rule='/api/rest/data/processes/ram/usage/<path:path>',
         endpoint='api.rest.data.processes.ram.usage.path',
