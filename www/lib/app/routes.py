@@ -4,6 +4,7 @@ from lib.handlers import cpu_frequency_handler
 from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
+from lib.handlers import swap_usage_handler
 
 _Route = collections.namedtuple('Route', [
     'rule', 'endpoint', 'view_func', 'provide_automatic_options', 'options'])
@@ -24,6 +25,17 @@ def _CreateRoute(
 
 
 ROUTES = [
+    _CreateRoute(
+        rule='/api/rest/data/swap/usage/<path:path>',
+        endpoint='api.rest.data.swap.usage.path',
+        view_func=swap_usage_handler.swap_usage_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/swap/usage/',
+        endpoint='api.rest.data.swap.usage',
+        view_func=swap_usage_handler.swap_usage_handler,
+        defaults={'path': ''},
+    ),
     _CreateRoute(
         rule='/api/rest/data/ram/usage/<path:path>',
         endpoint='api.rest.data.ram.usage.path',
