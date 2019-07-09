@@ -11,7 +11,7 @@ _NETWORK_DATA_SUBPATH_PATTERN = 'collectd/localhost/interface/if_octets-'
 def get_network_interfaces():
   root = ipfire_config.get_ipfire_config()['main']['rrdlog']
   return [
-      i.split('.')[0] for i in
+      i.rsplit('.', 1)[0] for i in
       shared_data.get_logged_members(
           '{root}/{subpath_pattern}'.format(
               root=root,

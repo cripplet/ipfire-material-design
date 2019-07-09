@@ -1,6 +1,7 @@
 import collections
 
 from lib.handlers import cpu_frequency_handler
+from lib.handlers import network_health_handler
 from lib.handlers import network_interfaces_io_handler
 from lib.handlers import processes_cpu_time_handler
 from lib.handlers import processes_ram_usage_handler
@@ -29,9 +30,22 @@ def _create_route(
 
 ROUTES = [
     _create_route(
-        rule='/api/rest/data/networks/interfaces/<path:path>',
-        endpoint='api.rest.data.networks.interfaces.path',
-        view_func=network_interfaces_io_handler.network_interfaces_list_handler,
+        rule='/api/rest/data/networks/health/',
+        endpoint='api.rest.data.networks.health',
+        view_func=network_health_handler.network_health_list_handler,
+        defaults={'path': ''},
+    ),
+    _create_route(
+        rule='/api/rest/data/networks/health/<string:hostname>/latency/',
+        endpoint='api.rest.data.networks.health.hostnames.latency',
+        view_func=network_health_handler.network_health_latency_handler,
+        defaults={'path': ''},
+    ),
+    _create_route(
+        rule='/api/rest/data/networks/health/<string:hostname>/drop_rate/',
+        endpoint='api.rest.data.networks.health.hostnames.drop_rate',
+        view_func=network_health_handler.network_health_drop_rate_handler,
+        defaults={'path': ''},
     ),
     _create_route(
         rule='/api/rest/data/networks/interfaces/',
@@ -40,20 +54,10 @@ ROUTES = [
         defaults={'path': ''},
     ),
     _create_route(
-        rule='/api/rest/data/networks/io/<string:interface>/<path:path>',
-        endpoint='api.rest.data.networks.io.interface.path',
-        view_func=network_interfaces_io_handler.network_interfaces_io_handler,
-    ),
-    _create_route(
         rule='/api/rest/data/networks/io/<string:interface>/',
         endpoint='api.rest.data.networks.io.interface',
         view_func=network_interfaces_io_handler.network_interfaces_io_handler,
         defaults={'path': ''},
-    ),
-    _create_route(
-        rule='/api/rest/data/processes/ram/usage/<path:path>',
-        endpoint='api.rest.data.processes.ram.usage.path',
-        view_func=processes_ram_usage_handler.processes_ram_usage_handler,
     ),
     _create_route(
         rule='/api/rest/data/processes/ram/usage/',
@@ -62,20 +66,10 @@ ROUTES = [
         defaults={'path': ''},
     ),
     _create_route(
-        rule='/api/rest/data/processes/cpu/time/<path:path>',
-        endpoint='api.rest.data.processes.cpu.time.path',
-        view_func=processes_cpu_time_handler.processes_cpu_time_handler,
-    ),
-    _create_route(
         rule='/api/rest/data/processes/cpu/time/',
         endpoint='api.rest.data.processes.cpu.time',
         view_func=processes_cpu_time_handler.processes_cpu_time_handler,
         defaults={'path': ''},
-    ),
-    _create_route(
-        rule='/api/rest/data/swap/usage/<path:path>',
-        endpoint='api.rest.data.swap.usage.path',
-        view_func=swap_usage_handler.swap_usage_handler,
     ),
     _create_route(
         rule='/api/rest/data/swap/usage/',
@@ -84,20 +78,10 @@ ROUTES = [
         defaults={'path': ''},
     ),
     _create_route(
-        rule='/api/rest/data/ram/usage/<path:path>',
-        endpoint='api.rest.data.ram.usage.path',
-        view_func=ram_usage_handler.ram_usage_handler,
-    ),
-    _create_route(
         rule='/api/rest/data/ram/usage/',
         endpoint='api.rest.data.ram.usage',
         view_func=ram_usage_handler.ram_usage_handler,
         defaults={'path': ''},
-    ),
-    _create_route(
-        rule='/api/rest/data/cpu/frequency/<path:path>',
-        endpoint='api.rest.data.cpu.frequency.path',
-        view_func=cpu_frequency_handler.cpu_frequency_handler,
     ),
     _create_route(
         rule='/api/rest/data/cpu/frequency/',
