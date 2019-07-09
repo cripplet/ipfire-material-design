@@ -27,10 +27,11 @@ def get_network_latency_data(hostname, step):
       start_time=step * 20,
       step=step
   ) + [
-      'DEF:rtt={root}/{subpath_pattern}{hostname}.rrd:ping:AVERAGE'.format(
+      'DEF:rtt_ms={root}/{subpath_pattern}{hostname}.rrd:ping:AVERAGE'.format(
           hostname=hostname,
           root=root,
           subpath_pattern=_NETWORK_PING_SUBPATH_PATTERN),
+      'CDEF:rtt=rtt_ms,1000,/',
       'XPORT:rtt:rtt',
   ]
   return json.loads(
