@@ -1,6 +1,6 @@
 import collections
 
-from lib.handlers import data_frequency_handler
+from lib.handlers import cpu_frequency_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
 
@@ -24,14 +24,14 @@ def _CreateRoute(
 
 ROUTES = [
     _CreateRoute(
-        rule='/api/rest/data/frequency/<path:path>',
+        rule='/api/rest/data/cpu/frequency/<path:path>',
         endpoint='api.rest.data.frequency.path',
-        view_func=data_frequency_handler.data_frequency_handler,
+        view_func=cpu_frequency_handler.cpu_frequency_handler,
     ),
     _CreateRoute(
-        rule='/api/rest/data/frequency',
+        rule='/api/rest/data/cpu/frequency/',
         endpoint='api.rest.data.frequency',
-        view_func=data_frequency_handler.data_frequency_handler,
+        view_func=cpu_frequency_handler.cpu_frequency_handler,
         defaults={'path': ''},
     ),
     _CreateRoute(
