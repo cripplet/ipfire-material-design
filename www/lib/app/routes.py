@@ -2,6 +2,7 @@ import collections
 
 from lib.handlers import cpu_frequency_handler
 from lib.handlers import processes_cpu_time_handler
+from lib.handlers import processes_ram_usage_handler
 from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
 from lib.handlers import status_handler
@@ -26,6 +27,17 @@ def _CreateRoute(
 
 
 ROUTES = [
+    _CreateRoute(
+        rule='/api/rest/data/processes/ram/usage/<path:path>',
+        endpoint='api.rest.data.processes.ram.usage.path',
+        view_func=processes_ram_usage_handler.processes_ram_usage_handler,
+    ),
+    _CreateRoute(
+        rule='/api/rest/data/processes/ram/usage/',
+        endpoint='api.rest.data.processes.ram.usage',
+        view_func=processes_ram_usage_handler.processes_ram_usage_handler,
+        defaults={'path': ''},
+    ),
     _CreateRoute(
         rule='/api/rest/data/processes/cpu/time/<path:path>',
         endpoint='api.rest.data.processes.cpu.time.path',
