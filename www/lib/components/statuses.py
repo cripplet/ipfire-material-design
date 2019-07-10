@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 import datetime
+import json
 import os
 import re
 import socket
@@ -10,16 +11,6 @@ from lib.components import shared
 
 _SSHKey = namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
 _SSHSession = namedtuple('SSHSession', ['username', 'active_since', 'ip'])
-_VulnerabilityLookup = namedtuple('VulnerabilityLookup', [
-    'description',
-    'cves'])
-_KnownVulnerability = namedtuple('KnownVulnerability', [
-    'name',
-    'description',
-    'cves',
-    'vulnerability_status',
-    'vulnerability_description',
-])
 _ConnectionStatus = namedtuple('ConnectionStatus', [
     'l3_name',
     'l4_name',
@@ -31,6 +22,25 @@ _ConnectionStatus = namedtuple('ConnectionStatus', [
     'tx',
     'state',
     'ttl',
+])
+_FixedLease = namedtuple('FixedLease', [
+    'mac',
+    'ip',
+    'enabled',
+    'next_server',
+    'filename',
+    'root_path',
+    'remark',
+])
+_VulnerabilityLookup = namedtuple('VulnerabilityLookup', [
+    'description',
+    'cves'])
+_KnownVulnerability = namedtuple('KnownVulnerability', [
+    'name',
+    'description',
+    'cves',
+    'vulnerability_status',
+    'vulnerability_description',
 ])
 
 _VULNERABILITY_STATUS = {
@@ -187,6 +197,20 @@ def _generate_connections():
           '/usr/local/bin/getconntracktable').split('\n') if c]
 
 
+def _generate_dhcp_leases():
+  with open('config/ipfire_shim.json') as fp:
+    ipfire_root = json.loads(fp.read())['ipfire_root']
+
+  return {
+      'fixed': [
+          _FixedLease(*l.split(','))._asdict() for l in shared.get_sys_output(
+              'cat {ipfire_root}/dns/fixleases'.format(
+                  ipfire_root=ipfire_root))
+      ],
+      'dynamic': [],
+  }
+
+
 def get_statuses():
   return {
     shared.Component.REMOTE: {
@@ -195,4 +219,5 @@ def get_statuses():
     },
     shared.Component.VULNERABILITY: _generate_vulnerabilities(),
     shared.Component.CONNECTIONS: _generate_connections(),
+    shared.Component.DHCP: _generate_dhcp_leases(),
   }

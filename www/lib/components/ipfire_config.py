@@ -49,6 +49,7 @@ def _get_fire_info_config():
 def get_ipfire_config():
   static_components = set([
      shared.Component.DDNS,
+     shared.Component.DHCP,
      shared.Component.ETHERNET,
      shared.Component.FIREWALL,
      shared.Component.MAIN,

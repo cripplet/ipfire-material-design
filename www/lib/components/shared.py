@@ -3,6 +3,7 @@ import os
 
 class Component(object):
   DDNS = 'ddns'
+  DHCP = 'dhcp'
   ETHERNET = 'ethernet'
   FIREWALL = 'firewall'
   MAIN = 'main'
