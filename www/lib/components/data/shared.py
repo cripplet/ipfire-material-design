@@ -10,7 +10,6 @@ def get_rrd_command_args(start_time, step):
       'xport',
       '--start=-{start_time}'.format(start_time=start_time),
       '--json',
-      '--showtime',
       '--step={step}'.format(step=step),
   ]
 

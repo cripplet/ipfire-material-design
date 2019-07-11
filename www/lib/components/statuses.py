@@ -197,6 +197,34 @@ def _generate_connections():
           '/usr/local/bin/getconntracktable').split('\n') if c]
 
 
+def _generate_dynamic_leases():
+  with open('/var/state/dhcp/dhcpd.leases') as fp:
+    content = fp.read()
+
+  p = re.compile(
+      r'lease (?P<ip>(?:\d+(?:\.|:)?)+) {(?:\n.*)*?'
+      r'(?:\s+starts \d+ (?P<start>[\/\d\ \:]+);)(?:\n.*)*?'
+      r'(?:\s+ends \d+ (?P<end>[\/\d\ \:]+);)(?:\n.*)*?'
+      r'(?:\s+hardware (?P<hardware_type>\w+) (?P<mac>(?:\w+:?)+;))(?:\n.*)*?'
+      r'(?:\s+ uid.*)?(?:\n.*)*?'
+      r'(?:\s+client-hostname \"(?P<hostname>\S+)\";)?(?:\n.*)*?\n'
+      r'}', re.MULTILINE)
+
+  leases = [
+    m.groupdict() for m in p.finditer(content)
+  ]
+  for l in leases:
+    l.update({
+        'start': int(
+            datetime.datetime.timestamp(
+                datetime.datetime.strptime(l['start'], '%Y/%m/%d %H:%M:%S'))),
+        'end': int(
+            datetime.datetime.timestamp(
+                datetime.datetime.strptime(l['end'], '%Y/%m/%d %H:%M:%S'))),
+    })
+  return leases
+
+
 def _generate_dhcp_leases():
   with open('config/ipfire_shim.json') as fp:
     ipfire_root = json.loads(fp.read())['ipfire_root']
@@ -207,7 +235,7 @@ def _generate_dhcp_leases():
               'cat {ipfire_root}/dns/fixleases'.format(
                   ipfire_root=ipfire_root))
       ],
-      'dynamic': [],
+      'dynamic': _generate_dynamic_leases(),
   }
 
 
