@@ -108,6 +108,11 @@ ROUTES = [
         view_func=config_handler.config_get_handler,
     ),
     _create_route(
+        rule='/api/rest/component/<string:component>/status/',
+        endpoint='api.rest.component.component.status.get',
+        view_func=config_handler.status_get_handler,
+    ),
+    _create_route(
         rule='/api/rest/component/',
         endpoint='api.rest.component.get',
         view_func=config_handler.config_list_components_handler,
