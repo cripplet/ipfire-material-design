@@ -10,7 +10,6 @@ from lib.handlers import processes_cpu_time_handler
 from lib.handlers import processes_ram_usage_handler
 from lib.handlers import ram_usage_handler
 from lib.handlers import settings_handler
-from lib.handlers import status_handler
 from lib.handlers import swap_usage_handler
 from lib.handlers import version_handler
 
