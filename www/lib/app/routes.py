@@ -89,12 +89,12 @@ ROUTES = [
         endpoint='api.rest.config.settings',
         view_func=settings_handler.settings_handler,
     ),
+
     _create_route(
-        rule='/api/rest/config/version/',
-        endpoint='api.rest.config.version',
+        rule='/api/rest/version/',
+        endpoint='api.rest.version',
         view_func=version_handler.version_handler,
     ),
-
     _create_route(
         rule='/api/rest/component/<string:component>/config/',
         endpoint='api.rest.component.component.config.get',

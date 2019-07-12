@@ -1,3 +1,4 @@
 {
-    "version": "WTF"
+    "api_version": "WTF",
+    "ipfire_core": 134
 }
