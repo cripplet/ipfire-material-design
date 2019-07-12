@@ -7,6 +7,7 @@ from lib.components.config import simple_ipfire_config
 from lib.components.config import sys_config
 
 from lib.components.status import connection_status
+from lib.components.status import firewall_status
 from lib.components.status import lease_status
 from lib.components.status import remote_status
 from lib.components.status import vulnerability_status
@@ -40,6 +41,7 @@ def status_get_handler(component: str) -> flask.Response:
     shared.Component.VULNERABILITY.value: vulnerability_status.get_vulnerability_status,
     shared.Component.CONNECTIONS.value: connection_status.get_connection_status,
     shared.Component.DHCP.value: lease_status.get_lease_status,
+    shared.Component.FIREWALL.value: firewall_status.get_firewall_status,
   }
   if component in dispatcher:
     return shared_handler.json_handler(dispatcher[component]())

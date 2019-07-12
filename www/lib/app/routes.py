@@ -90,12 +90,6 @@ ROUTES = [
         endpoint='api.rest.config.settings',
         view_func=settings_handler.settings_handler,
     ),
-
-    _create_route(
-        rule='/api/rest/config/status/',
-        endpoint='api.rest.config.status',
-        view_func=status_handler.status_handler,
-    ),
     _create_route(
         rule='/api/rest/config/version/',
         endpoint='api.rest.config.version',
