@@ -1,0 +1,29 @@
+import flask
+
+from lib.components import shared
+from lib.components.config import fire_info_config
+from lib.components.config import modem_config
+from lib.components.config import simple_ipfire_config
+from lib.components.config import sys_config
+
+from lib.handlers import not_found_handler
+from lib.handlers import shared as shared_handler
+
+
+def config_list_components_handler() -> flask.Response:
+  return shared_handler.json_handler([c.value for c in shared.Component])
+
+
+def config_get_handler(component: str) -> flask.Response:
+  if component == shared.Component.SYS.value:
+    return shared_handler.json_handler(sys_config.get_sys_config())
+  if component == shared.Component.FIREINFO.value:
+    return shared_handler.json_handler(fire_info_config.get_fire_info_config())
+  if component == shared.Component.MODEM.value:
+    return shared_handler.json_handler(modem_config.get_modem_config())
+
+  try:
+    return shared_handler.json_handler(
+        simple_ipfire_config.get_simple_ipfire_config(component))
+  except KeyError:
+    return not_found_handler.not_found_handler()

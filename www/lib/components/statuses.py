@@ -307,12 +307,12 @@ def _generate_firewall_rules():
 
 def get_statuses():
   return {
-    shared.Component.REMOTE: {
+    shared.Component.REMOTE.value: {
         'keys': _generate_ssh_keys(),
         'sessions': _generate_ssh_sessions(),
     },
-    shared.Component.VULNERABILITY: _generate_vulnerabilities(),
-    shared.Component.CONNECTIONS: _generate_connections(),
-    shared.Component.DHCP: _generate_dhcp_leases(),
-    shared.Component.FIREWALL: _generate_firewall_rules(),
+    shared.Component.VULNERABILITY.value: _generate_vulnerabilities(),
+    shared.Component.CONNECTIONS.value: _generate_connections(),
+    shared.Component.DHCP.value: _generate_dhcp_leases(),
+    shared.Component.FIREWALL.value: _generate_firewall_rules(),
   }

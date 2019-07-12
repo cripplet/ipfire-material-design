@@ -1,5 +1,8 @@
 import collections
 
+from werkzeug import routing
+
+from lib.handlers import config_handler
 from lib.handlers import cpu_frequency_handler
 from lib.handlers import network_health_handler
 from lib.handlers import network_interfaces_io_handler
@@ -80,11 +83,14 @@ ROUTES = [
         endpoint='api.rest.data.cpu.usage',
         view_func=cpu_frequency_handler.cpu_frequency_handler,
     ),
+
+    # This is deprecated.
     _create_route(
         rule='/api/rest/config/settings/',
         endpoint='api.rest.config.settings',
         view_func=settings_handler.settings_handler,
     ),
+
     _create_route(
         rule='/api/rest/config/status/',
         endpoint='api.rest.config.status',
@@ -94,5 +100,16 @@ ROUTES = [
         rule='/api/rest/config/version/',
         endpoint='api.rest.config.version',
         view_func=version_handler.version_handler,
+    ),
+
+    _create_route(
+        rule='/api/rest/component/<string:component>/config/',
+        endpoint='api.rest.component.component.config.get',
+        view_func=config_handler.config_get_handler,
+    ),
+    _create_route(
+        rule='/api/rest/component/',
+        endpoint='api.rest.component.get',
+        view_func=config_handler.config_list_components_handler,
     ),
 ]

@@ -47,7 +47,7 @@ def _get_fire_info_config():
   
 
 def get_ipfire_config():
-  static_components = set([
+  static_components = set(c.value for c in [
      shared.Component.DDNS,
      shared.Component.DHCP,
      shared.Component.ETHERNET,
@@ -71,8 +71,8 @@ def get_ipfire_config():
   }
 
   config.update({
-      shared.Component.SYS: _get_system_config(),
-      shared.Component.FIREINFO: _get_fire_info_config(),
+      shared.Component.SYS.value: _get_system_config(),
+      shared.Component.FIREINFO.value: _get_fire_info_config(),
   })
 
   return config

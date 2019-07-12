@@ -1,7 +1,10 @@
+import enum
 import os
 
+from typing import Dict
 
-class Component(object):
+
+class Component(enum.Enum):
   DDNS = 'ddns'
   DHCP = 'dhcp'
   ETHERNET = 'ethernet'
@@ -18,6 +21,14 @@ class Component(object):
   CONNECTIONS = 'connections'
 
 
-def get_sys_output(cmd):
+class ShimObject(object):
+  def FromEngine(self, data: str) -> Dict:
+    raise NotImplementedError
+
+  def ToEngineFormat(self, data: Dict) -> str:
+    raise NotImplementedError
+
+
+def get_sys_output(cmd: str) -> str:
   with os.popen(cmd, 'r') as fp:
     return fp.read().strip()
