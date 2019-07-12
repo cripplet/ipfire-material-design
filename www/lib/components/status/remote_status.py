@@ -6,18 +6,6 @@ from lib.components import shared
 
 _SSHKey = collections.namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
 _SSHSession = collections.namedtuple('SSHSession', ['username', 'active_since', 'ip'])
-_ConnectionStatus = collections.namedtuple('ConnectionStatus', [
-    'l3_name',
-    'l4_name',
-    'src_addr',
-    'src_port',
-    'dest_addr',
-    'dest_port',
-    'rx',
-    'tx',
-    'state',
-    'ttl',
-])
 
 
 class _RemoteComponentShim(shared.ShimObject):

@@ -5,7 +5,6 @@ import time
 
 from lib.components import shared
 
-
 _FirewallRule = collections.namedtuple('FirewallRule', [
     'position',
     'action',

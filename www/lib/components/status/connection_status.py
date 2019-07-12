@@ -5,7 +5,6 @@ import socket
 
 from lib.components import shared
 
-
 _ConnectionStatus = collections.namedtuple('ConnectionStatus', [
     'l3_name',
     'l4_name',
