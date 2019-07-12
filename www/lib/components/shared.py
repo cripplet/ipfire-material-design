@@ -1,7 +1,11 @@
 import enum
 import os
 
-from typing import Dict
+from typing import AnyStr, Dict, Union, List
+
+
+EngineType = AnyStr
+ConfigType = Union[Dict, List]
 
 
 class Component(enum.Enum):
@@ -18,14 +22,14 @@ class Component(enum.Enum):
   SYS = 'sys'
   FIREINFO = 'fireinfo'
   VULNERABILITY = 'vulnerability'
-  CONNECTIONS = 'connections'
+  CONNECTIONS = 'connection'
 
 
 class ShimObject(object):
-  def FromEngine(self, data: str) -> Dict:
+  def FromEngine(self, data: EngineType) -> ConfigType:
     raise NotImplementedError
 
-  def ToEngineFormat(self, data: Dict) -> str:
+  def ToEngineFormat(self, data: ConfigType) -> EngineType:
     raise NotImplementedError
 
 

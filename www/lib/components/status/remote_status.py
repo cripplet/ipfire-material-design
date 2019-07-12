@@ -1,7 +1,6 @@
 import collections
 import datetime
 import os
-from typing import Dict
 
 from lib.components import shared
 
@@ -22,7 +21,7 @@ _ConnectionStatus = collections.namedtuple('ConnectionStatus', [
 
 
 class _RemoteComponentShim(shared.ShimObject):
-  def FromEngine(self, data: str) -> Dict:
+  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
     return {
         'keys': [
             _SSHKey(
@@ -57,5 +56,5 @@ class _RemoteComponentShim(shared.ShimObject):
 
 
 
-def get_remote_status():
+def get_remote_status() -> shared.ConfigType:
   return _RemoteComponentShim().FromEngine(data='')

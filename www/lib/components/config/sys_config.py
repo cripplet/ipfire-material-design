@@ -1,5 +1,3 @@
-from typing import Dict
-
 from lib.components import shared
 from lib.components.config import shared as shared_config
 
@@ -7,7 +5,7 @@ from lib.components.config import shared as shared_config
 class _SysConfigShim(shared.ShimObject):
   """Read-only system info."""
 
-  def FromEngine(self, data: str) -> Dict:
+  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
     return {
         'ipfire': shared.get_sys_output('cat /etc/system-release'),
         'kernel': shared.get_sys_output('uname -a'),
@@ -18,5 +16,5 @@ class _SysConfigShim(shared.ShimObject):
     }
 
 
-def get_sys_config() -> Dict:
+def get_sys_config() -> shared.ConfigType:
   return _SysConfigShim().FromEngine(data='')

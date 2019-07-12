@@ -9,20 +9,6 @@ import socket
 from lib.components import shared
 
 
-_SSHKey = namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
-_SSHSession = namedtuple('SSHSession', ['username', 'active_since', 'ip'])
-_ConnectionStatus = namedtuple('ConnectionStatus', [
-    'l3_name',
-    'l4_name',
-    'src_addr',
-    'src_port',
-    'dest_addr',
-    'dest_port',
-    'rx',
-    'tx',
-    'state',
-    'ttl',
-])
 _FixedLease = namedtuple('FixedLease', [
     'mac',
     'ip',
@@ -72,65 +58,6 @@ _FirewallRule = namedtuple('FirewallRule', [
     'connection_rate_limit_scalar',
     'connection_rate_limit_unit',
 ])
-
-
-def _process_connection(conn_entry):
-  l4_protocol_name_lookup = {
-      int(protocol_number): protocol_name[8:].upper()
-      for (protocol_name, protocol_number) in vars(socket).items()
-      if protocol_name.startswith('IPPROTO')
-  }
-
-  l3_protocol_name_translate = {
-      'IPV6': 'IPv6',
-      'IPV4': 'IPv4',
-  }
-
-  conn_entry_parts = conn_entry.split()
-
-  (l3_protocol_name, _, _, l4_protocol_number, ttl) = conn_entry_parts[0:5]
-
-  l3_protocol_name = l3_protocol_name_translate.get(
-      l3_protocol_name.upper(),
-      l3_protocol_name.upper()
-  )
-
-  l4_protocol_name = l4_protocol_name_lookup.get(
-      int(l4_protocol_number),
-      l4_protocol_number).upper()
-
-  src_addr_entries = [
-      e.split('=')[-1] for e in conn_entry_parts if e.startswith('src=')]
-  src_port_entries = [
-      int(e.split('=')[-1]) for e in conn_entry_parts if e.startswith(
-          'sport=')]
-  dest_addr_entries = [
-      e.split('=')[-1] for e in conn_entry_parts if e.startswith('dst=')]
-  dest_port_entries = [
-      int(e.split('=')[-1]) for e in conn_entry_parts if e.startswith(
-          'dport=')]
-  (tx, rx) = [
-      int(e.split('=')[-1]) for e in conn_entry_parts if e.startswith(
-          'bytes=')]
-
-  return _ConnectionStatus(
-      l3_name=l3_protocol_name,
-      l4_name=l4_protocol_name,
-      src_addr=src_addr_entries,
-      src_port=src_port_entries,
-      dest_addr=dest_addr_entries,
-      dest_port=dest_port_entries,
-      rx=rx,
-      tx=tx,
-      state=conn_entry_parts[5].upper() if l4_protocol_name == 'TCP' else '',
-      ttl=int(ttl),
-  )._asdict()
-
-
-def _generate_connections():
-  return [
-      _process_connection(c) for c in shared.get_sys_output(
-          '/usr/local/bin/getconntracktable').split('\n') if c]
 
 
 def _generate_dynamic_leases():
@@ -203,7 +130,6 @@ def _generate_firewall_rules():
 
 def get_statuses():
   return {
-    shared.Component.CONNECTIONS.value: _generate_connections(),
     shared.Component.DHCP.value: _generate_dhcp_leases(),
     shared.Component.FIREWALL.value: _generate_firewall_rules(),
   }

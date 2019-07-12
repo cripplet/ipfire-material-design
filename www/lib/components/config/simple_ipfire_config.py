@@ -1,11 +1,11 @@
 import json
-from typing import Dict
+from typing import AnyStr
 
 from lib.components import shared
 from lib.components.config import shared as shared_config
 
 
-def get_simple_ipfire_config(component: str) -> Dict:
+def get_simple_ipfire_config(component: AnyStr) -> shared.ConfigType:
   if component not in set([c.value for c in shared.Component]):
     raise KeyError(
         'Cannot find specified component \'{c}\''.format(

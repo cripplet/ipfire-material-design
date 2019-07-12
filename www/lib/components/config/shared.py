@@ -1,7 +1,5 @@
 import json
 
-from typing import Dict
-
 from lib.components import shared
 
 
@@ -10,7 +8,7 @@ class IPFireConfigShim(shared.ShimObject):
     'on': True,
     'off': True,
   }
-  def FromEngine(self, data: str) -> Dict:
+  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
     if not data:
       return {}
 
@@ -31,7 +29,7 @@ class IPFireConfigShim(shared.ShimObject):
           pass
     return config
 
-  def ToEngine(self, data: Dict) -> str:
+  def ToEngine(self, data: shared.ConfigType) -> shared.EngineType:
     config = {}
     for (k, v) in data.items():
       if v in self.BOOL_TRANSLATE_DICT.values():
