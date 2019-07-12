@@ -7,6 +7,7 @@ from lib.components.config import simple_ipfire_config
 from lib.components.config import sys_config
 
 from lib.components.status import connection_status
+from lib.components.status import lease_status
 from lib.components.status import remote_status
 from lib.components.status import vulnerability_status
 
@@ -34,12 +35,12 @@ def config_get_handler(component: str) -> flask.Response:
 
 
 def status_get_handler(component: str) -> flask.Response:
-  if component == shared.Component.REMOTE.value:
-    return shared_handler.json_handler(remote_status.get_remote_status())
-  if component == shared.Component.VULNERABILITY.value:
-    return shared_handler.json_handler(
-        vulnerability_status.get_vulnerability_status())
-  if component == shared.Component.CONNECTIONS.value:
-    return shared_handler.json_handler(
-        connection_status.get_connection_status())
+  dispatcher = {
+    shared.Component.REMOTE.value: remote_status.get_remote_status,
+    shared.Component.VULNERABILITY.value: vulnerability_status.get_vulnerability_status,
+    shared.Component.CONNECTIONS.value: connection_status.get_connection_status,
+    shared.Component.DHCP.value: lease_status.get_lease_status,
+  }
+  if component in dispatcher:
+    return shared_handler.json_handler(dispatcher[component]())
   return not_found_handler.not_found_handler()

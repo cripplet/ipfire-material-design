@@ -9,15 +9,6 @@ import socket
 from lib.components import shared
 
 
-_FixedLease = namedtuple('FixedLease', [
-    'mac',
-    'ip',
-    'enabled',
-    'next_server',
-    'filename',
-    'root_path',
-    'remark',
-])
 _FirewallRule = namedtuple('FirewallRule', [
     'position',
     'action',
@@ -60,48 +51,6 @@ _FirewallRule = namedtuple('FirewallRule', [
 ])
 
 
-def _generate_dynamic_leases():
-  with open('/var/state/dhcp/dhcpd.leases') as fp:
-    content = fp.read()
-
-  p = re.compile(
-      r'lease (?P<ip>(?:\d+(?:\.|:)?)+) {(?:\n.*)*?'
-      r'(?:\s+starts \d+ (?P<start>[\/\d\ \:]+);)(?:\n.*)*?'
-      r'(?:\s+ends \d+ (?P<end>[\/\d\ \:]+);)(?:\n.*)*?'
-      r'(?:\s+hardware (?P<hardware_type>\w+) (?P<mac>(?:\w+:?)+;))(?:\n.*)*?'
-      r'(?:\s+ uid.*)?(?:\n.*)*?'
-      r'(?:\s+client-hostname \"(?P<hostname>\S+)\";)?(?:\n.*)*?\n'
-      r'}', re.MULTILINE)
-
-  leases = [
-    m.groupdict() for m in p.finditer(content)
-  ]
-  for l in leases:
-    l.update({
-        'start': int(
-            datetime.datetime.timestamp(
-                datetime.datetime.strptime(l['start'], '%Y/%m/%d %H:%M:%S'))),
-        'end': int(
-            datetime.datetime.timestamp(
-                datetime.datetime.strptime(l['end'], '%Y/%m/%d %H:%M:%S'))),
-    })
-  return leases
-
-
-def _generate_dhcp_leases():
-  with open('config/ipfire_shim.json') as fp:
-    ipfire_root = json.loads(fp.read())['ipfire_root']
-
-  return {
-      'fixed': [
-          _FixedLease(*l.split(','))._asdict() for l in shared.get_sys_output(
-              'cat {ipfire_root}/dns/fixleases'.format(
-                  ipfire_root=ipfire_root))
-      ],
-      'dynamic': _generate_dynamic_leases(),
-  }
-
-
 def _generate_firewall_rules():
   with open('config/ipfire_shim.json') as fp:
     ipfire_root = json.loads(fp.read())['ipfire_root']
@@ -130,6 +79,5 @@ def _generate_firewall_rules():
 
 def get_statuses():
   return {
-    shared.Component.DHCP.value: _generate_dhcp_leases(),
     shared.Component.FIREWALL.value: _generate_firewall_rules(),
   }
