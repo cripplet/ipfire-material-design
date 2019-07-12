@@ -6,6 +6,7 @@ from lib.components.config import modem_config
 from lib.components.config import simple_ipfire_config
 from lib.components.config import sys_config
 from lib.components.status import remote_status
+from lib.components.status import vulnerability_status
 
 from lib.handlers import not_found_handler
 from lib.handlers import shared as shared_handler
@@ -33,4 +34,7 @@ def config_get_handler(component: str) -> flask.Response:
 def status_get_handler(component: str) -> flask.Response:
   if component == shared.Component.REMOTE.value:
     return shared_handler.json_handler(remote_status.get_remote_status())
+  if component == shared.Component.VULNERABILITY.value:
+    return shared_handler.json_handler(
+        vulnerability_status.get_vulnerability_status())
   return not_found_handler.not_found_handler()
