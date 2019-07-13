@@ -1,4 +1,5 @@
 # ipfire-rest
+Experimental REST API for IPFire
 
 ## Installation
 
