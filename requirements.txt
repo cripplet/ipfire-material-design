@@ -1,2 +1,2 @@
 Flask=1.0.2
-rrdtool=0.1.15
+Flask-Cors=3.0.8

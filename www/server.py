@@ -2,6 +2,8 @@ from lib.app import app
 from lib.app import routes
 from lib.app import errors
 
+import flask_cors
+
 
 def main():
   for r in routes.ROUTES:
@@ -16,6 +18,7 @@ def main():
         code_or_exception=h['code_or_exception'],
         f=h['f'])
 
+  cors = flask_cors.CORS(app.app)  # debug only
   app.app.run(debug=True, host='0.0.0.0', port=8080)
 
 
