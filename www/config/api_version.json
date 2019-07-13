@@ -1,4 +1,8 @@
-{
-    "api_version": "WTF",
-    "ipfire_core": 134
-}
+[
+    {
+        "api_version": "WTF",
+        "ipfire_core": 134,
+        "release_notes": "REST API GET functionality implemented for common queries.",
+        "timestamp": 1562993581
+    }
+]
