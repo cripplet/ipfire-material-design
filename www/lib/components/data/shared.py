@@ -1,3 +1,5 @@
+from typing import AnyStr, List
+
 import json
 import re
 
@@ -12,8 +14,9 @@ LOG_ROOT_DIRECTORY = '{rrd_root}/collectd/localhost'.format(
 
 class MonitoringShim(shared.ShimObject):
   UNIT = None
-  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
-    rrd_data = json.loads(shared.get_sys_output(data))
+  def FromEngine(self, query: List[AnyStr]) -> shared.ConfigType:
+    command = ' '.join(get_rrd_command_args() + query)
+    rrd_data = json.loads(shared.get_sys_output(command))
     rrd_data['meta']['unit'] = self.UNIT
     del rrd_data['about']
     return rrd_data

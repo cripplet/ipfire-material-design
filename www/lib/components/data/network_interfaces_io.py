@@ -1,3 +1,5 @@
+from typing import AnyStr
+
 import json
 
 from lib.components import shared
@@ -19,21 +21,21 @@ def get_network_interfaces():
 
 class _NetworkInterfaceIOData(shared_data.MonitoringShim):
   UNIT = 'b'
-  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
-    command = ' '.join(shared_data.get_rrd_command_args() + [
+  def FromEngine(self, interface: AnyStr) -> shared.ConfigType:
+    query = [
         'DEF:rx={root}/{subpath_pattern}{interface}.rrd:rx:AVERAGE'.format(
-            interface=data,
+            interface=interface,
             root=shared_data.LOG_ROOT_DIRECTORY,
             subpath_pattern=_NETWORK_DATA_SUBPATH_PATTERN),
         'DEF:tx={root}/{subpath_pattern}{interface}.rrd:tx:AVERAGE'.format(
-            interface=data,
+            interface=interface,
             root=shared_data.LOG_ROOT_DIRECTORY,
             subpath_pattern=_NETWORK_DATA_SUBPATH_PATTERN),
         'XPORT:rx:rx',
         'XPORT:tx:tx',
-    ])
-    return super(_NetworkInterfaceIOData, self).FromEngine(data=command)
+    ]
+    return super(_NetworkInterfaceIOData, self).FromEngine(query=query)
 
 
 def get_network_interfaces_io_data(interface, step):
-  return _NetworkInterfaceIOData().FromEngine(data=interface)
+  return _NetworkInterfaceIOData().FromEngine(interface=interface)
