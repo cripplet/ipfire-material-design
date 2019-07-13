@@ -19,5 +19,5 @@ class _RAMUsageData(shared_data.MonitoringShim):
     return super(_RAMUsageData, self).FromEngine(query=query)
 
 
-def get_ram_usage_data(step):
+def get_ram_usage_data():
   return _RAMUsageData().FromEngine()

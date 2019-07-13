@@ -18,5 +18,5 @@ class _SwapUsageData(shared_data.MonitoringShim):
     return super(_SwapUsageData, self).FromEngine(query=query)
 
 
-def get_swap_usage_data(step):
+def get_swap_usage_data():
   return _SwapUsageData().FromEngine()

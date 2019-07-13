@@ -46,9 +46,17 @@ class _NetworkDropRateData(shared_data.MonitoringShim):
     return super(_NetworkDropRateData, self).FromEngine(query=query)
 
 
-def get_network_latency_data(hostname, step):
+def get_network_latency_data(hostname):
+  if hostname not in set(get_hostnames()):
+    raise KeyError(
+        'Cannot find specified hostname \'{h}\''.format(
+            h=hostname))
   return _NetworkLatencyData().FromEngine(hostname=hostname)
 
 
-def get_network_drop_rate_data(hostname, step):
+def get_network_drop_rate_data(hostname):
+  if hostname not in set(get_hostnames()):
+    raise KeyError(
+        'Cannot find specified hostname \'{h}\''.format(
+            h=hostname))
   return _NetworkDropRateData().FromEngine(hostname=hostname)

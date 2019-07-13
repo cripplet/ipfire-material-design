@@ -37,5 +37,10 @@ class _NetworkInterfaceIOData(shared_data.MonitoringShim):
     return super(_NetworkInterfaceIOData, self).FromEngine(query=query)
 
 
-def get_network_interfaces_io_data(interface, step):
+def get_network_interfaces_io_data(interface):
+  if interface not in set(get_network_interfaces()):
+    raise KeyError(
+        'Cannot find specified interface \'{i}\''.format(
+            i=interface))
+
   return _NetworkInterfaceIOData().FromEngine(interface=interface)

@@ -19,5 +19,5 @@ class _CPUFrequencyData(shared_data.MonitoringShim):
     return super(_CPUFrequencyData, self).FromEngine(query=query)
 
 
-def get_cpu_frequency_data(step):
+def get_cpu_frequency_data():
   return _CPUFrequencyData().FromEngine()
