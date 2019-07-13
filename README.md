@@ -1,4 +1,4 @@
-ipfire-material-design
+ipfire-rest
 ----
 
 ## Installation
