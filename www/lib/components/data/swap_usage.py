@@ -1,6 +1,5 @@
 import json
 
-from lib.components import ipfire_config
 from lib.components import shared
 from lib.components.data import shared as shared_data
 

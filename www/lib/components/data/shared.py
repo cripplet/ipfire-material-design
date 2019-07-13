@@ -1,16 +1,31 @@
+import json
 import re
 
-from lib.components import ipfire_config
 from lib.components import shared
+from lib.components.config import simple_ipfire_config
+
+LOG_ROOT_DIRECTORY = '{rrd_root}/collectd/localhost'.format(
+  rrd_root=simple_ipfire_config.get_simple_ipfire_config(
+      shared.Component.MAIN.value)['rrdlog']
+)
 
 
-def get_rrd_command_args(start_time, step):
+class MonitoringShim(shared.ShimObject):
+  UNIT = None
+  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
+    rrd_data = json.loads(shared.get_sys_output(data))
+    rrd_data['meta']['unit'] = self.UNIT
+    del rrd_data['about']
+    return rrd_data
+
+
+def get_rrd_command_args():
   return [
       'rrdtool',
       'xport',
-      '--start=-{start_time}'.format(start_time=start_time),
+      '--start=-600',
       '--json',
-      '--step={step}'.format(step=step),
+      '--step=30',
   ]
 
 

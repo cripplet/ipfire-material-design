@@ -1,15 +1,10 @@
 import collections
 
-from werkzeug import routing
-
 from lib.handlers import config_handler
 from lib.handlers import cpu_frequency_handler
 from lib.handlers import network_health_handler
 from lib.handlers import network_interfaces_io_handler
-from lib.handlers import processes_cpu_time_handler
-from lib.handlers import processes_ram_usage_handler
 from lib.handlers import ram_usage_handler
-from lib.handlers import settings_handler
 from lib.handlers import swap_usage_handler
 from lib.handlers import version_handler
 
@@ -58,16 +53,6 @@ ROUTES = [
         view_func=network_interfaces_io_handler.network_interfaces_io_handler,
     ),
     _create_route(
-        rule='/api/rest/data/processes/ram/usage/',
-        endpoint='api.rest.data.processes.ram.usage',
-        view_func=processes_ram_usage_handler.processes_ram_usage_handler,
-    ),
-    _create_route(
-        rule='/api/rest/data/processes/cpu/time/',
-        endpoint='api.rest.data.processes.cpu.time',
-        view_func=processes_cpu_time_handler.processes_cpu_time_handler,
-    ),
-    _create_route(
         rule='/api/rest/data/swap/usage/',
         endpoint='api.rest.data.swap.usage',
         view_func=swap_usage_handler.swap_usage_handler,
@@ -81,13 +66,6 @@ ROUTES = [
         rule='/api/rest/data/cpu/usage/',
         endpoint='api.rest.data.cpu.usage',
         view_func=cpu_frequency_handler.cpu_frequency_handler,
-    ),
-
-    # This is deprecated.
-    _create_route(
-        rule='/api/rest/config/settings/',
-        endpoint='api.rest.config.settings',
-        view_func=settings_handler.settings_handler,
     ),
 
     _create_route(
