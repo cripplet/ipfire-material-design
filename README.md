@@ -1,5 +1,4 @@
-ipfire-rest
-----
+# ipfire-rest
 
 ## Installation
 
