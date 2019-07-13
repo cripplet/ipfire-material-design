@@ -74,7 +74,7 @@ class _DynamicLeaseShim(shared.ShimObject):
 
 
 class _LeaseStatusShim(shared.ShimObject):
-  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
+  def FromEngine(self) -> shared.ConfigType:
     with open('config/ipfire_shim.json') as fp:
       ipfire_root = json.loads(fp.read())['ipfire_root']
 
@@ -88,10 +88,10 @@ class _LeaseStatusShim(shared.ShimObject):
     with open('/var/state/dhcp/dhcpd.leases') as fp:
       return {
           'fixed': [
-              _FixedLeaseShim().FromEngine(l) for l in fixedleases_lines],
-          'dynamic': _DynamicLeaseShim().FromEngine(fp.read()),
+              _FixedLeaseShim().FromEngine(data=l) for l in fixedleases_lines],
+          'dynamic': _DynamicLeaseShim().FromEngine(data=fp.read()),
       }
 
 
 def get_lease_status() -> shared.ConfigType:
-  return _LeaseStatusShim().FromEngine(data='')
+  return _LeaseStatusShim().FromEngine()

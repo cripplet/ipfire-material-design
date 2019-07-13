@@ -26,10 +26,10 @@ class Component(enum.Enum):
 
 
 class ShimObject(object):
-  def FromEngine(self, data: EngineType) -> ConfigType:
+  def FromEngine(self, *args, **kwargs) -> ConfigType:
     raise NotImplementedError
 
-  def ToEngineFormat(self, data: ConfigType) -> EngineType:
+  def ToEngineFormat(self, *args, **kwargs) -> EngineType:
     raise NotImplementedError
 
 

@@ -9,7 +9,7 @@ _SSHSession = collections.namedtuple('SSHSession', ['username', 'active_since', 
 
 
 class _RemoteComponentShim(shared.ShimObject):
-  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
+  def FromEngine(self) -> shared.ConfigType:
     return {
         'keys': [
             _SSHKey(
@@ -45,4 +45,4 @@ class _RemoteComponentShim(shared.ShimObject):
 
 
 def get_remote_status() -> shared.ConfigType:
-  return _RemoteComponentShim().FromEngine(data='')
+  return _RemoteComponentShim().FromEngine()

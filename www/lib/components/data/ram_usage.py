@@ -6,7 +6,7 @@ from lib.components.data import shared as shared_data
 
 class _RAMUsageData(shared_data.MonitoringShim):
   UNIT = 'b'
-  def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
+  def FromEngine(self) -> shared.ConfigType:
     data = ' '.join(
         shared_data.get_rrd_command_args() + sum([
             [
@@ -21,4 +21,4 @@ class _RAMUsageData(shared_data.MonitoringShim):
 
 
 def get_ram_usage_data(step):
-  return _RAMUsageData().FromEngine(data='')
+  return _RAMUsageData().FromEngine()

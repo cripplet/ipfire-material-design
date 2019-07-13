@@ -45,8 +45,8 @@ class _NetworkDropRateData(shared_data.MonitoringShim):
 
 
 def get_network_latency_data(hostname, step):
-  return _NetworkLatencyData().FromEngine(hostname)
+  return _NetworkLatencyData().FromEngine(data=hostname)
 
 
 def get_network_drop_rate_data(hostname, step):
-  return _NetworkDropRateData().FromEngine(hostname)
+  return _NetworkDropRateData().FromEngine(data=hostname)
