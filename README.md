@@ -1,5 +1,5 @@
-ipfire-material-design
-----
+# ipfire-rest
+Experimental REST API for IPFire
 
 ## Installation
 
@@ -18,3 +18,7 @@ ipfire-material-design
 1. Check `/var/log/httpd/error_log`
 1. Check `/var/ipfire/general-functions.pl`
 1. Run `perl /srv/web/ipfire/cgi-bin/index.cgi`
+
+## See Also
+
+* [ipfire-rest-ui](https://github.com/cripplet/ipfire-rest-ui)
