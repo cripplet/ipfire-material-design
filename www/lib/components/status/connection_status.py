@@ -82,4 +82,4 @@ class _ConnectionStatusShim(shared.ShimObject):
 def get_connection_status() -> shared.ConfigType:
   return [
       _ConnectionStatusShim().FromEngine(
-          shared.get_sys_output('/usr/local/bin/getconntracktable'))]
+          data=shared.get_sys_output('/usr/local/bin/getconntracktable'))]

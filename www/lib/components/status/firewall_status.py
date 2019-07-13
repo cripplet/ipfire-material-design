@@ -159,6 +159,7 @@ def get_firewall_status() -> shared.ConfigType:
   for (k, fn) in firewall_rules_configs.items():
     with open(fn) as fp:
       rules[k] = [
-          _FirewallRuleShim().FromEngine(l.strip()) for l in fp.readlines()
+          _FirewallRuleShim().FromEngine(
+              data=l.strip()) for l in fp.readlines()
       ]
   return rules
