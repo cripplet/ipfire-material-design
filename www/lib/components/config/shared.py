@@ -6,7 +6,7 @@ from lib.components import shared
 class IPFireConfigShim(shared.ShimObject):
   BOOL_TRANSLATE_DICT = {
     'on': True,
-    'off': True,
+    'off': False,
   }
   def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
     if not data:
