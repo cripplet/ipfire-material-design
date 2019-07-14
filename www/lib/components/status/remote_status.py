@@ -31,10 +31,13 @@ class _RemoteComponentShim(shared.ShimObject):
         'sessions': [
             _SSHSession(
                 username=username,
-                login_timestamp=datetime.datetime.timestamp(
-                    datetime.datetime.strptime(
-                        '{date} {time}'.format(date=date_since, time=time_since),
-                        '%Y-%m-%d %H:%M')),
+                login_timestamp=int(
+                    datetime.datetime.timestamp(
+                        datetime.datetime.strptime(
+                            '{date} {time}'.format(
+                                date=date_since,
+                                time=time_since),
+                            '%Y-%m-%d %H:%M'))),
                 ip=ip.strip('()'),
             )._asdict() for (username, _, date_since, time_since, ip) in [
               l.split() for l in shared.get_sys_output('who -s').split('\n')
