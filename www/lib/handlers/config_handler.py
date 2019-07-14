@@ -3,6 +3,7 @@ import flask
 from lib.components import shared
 from lib.components.config import fire_info_config
 from lib.components.config import modem_config
+from lib.components.config import remote_config
 from lib.components.config import simple_ipfire_config
 from lib.components.config import sys_config
 
@@ -27,6 +28,8 @@ def config_get_handler(component: str) -> flask.Response:
     return shared_handler.json_handler(fire_info_config.get_fire_info_config())
   if component == shared.Component.MODEM.value:
     return shared_handler.json_handler(modem_config.get_modem_config())
+  if component == shared.Component.REMOTE.value:
+    return shared_handler.json_handler(remote_config.get_remote_config())
 
   try:
     return shared_handler.json_handler(
