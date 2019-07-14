@@ -17,7 +17,7 @@ class _RemoteComponentShim(shared.ShimObject):
                 type=type,
                 size=int(shared.get_sys_output(
                     '/usr/bin/ssh-keygen -lf {file}  | cut -d" " -f1'.format(
-                        file=fn))),
+                        file=fn))) / 8,
                 fingerprint=shared.get_sys_output(
                     '/usr/bin/ssh-keygen -lf {file}  | cut -d" " -f2'.format(
                         file=fn)),
