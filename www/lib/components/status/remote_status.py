@@ -5,7 +5,7 @@ import os
 from lib.components import shared
 
 _SSHKey = collections.namedtuple('SSHKey', ['file', 'type', 'fingerprint', 'size'])
-_SSHSession = collections.namedtuple('SSHSession', ['username', 'active_since', 'ip'])
+_SSHSession = collections.namedtuple('SSHSession', ['username', 'login_timestamp', 'ip'])
 
 
 class _RemoteComponentShim(shared.ShimObject):
@@ -31,7 +31,7 @@ class _RemoteComponentShim(shared.ShimObject):
         'sessions': [
             _SSHSession(
                 username=username,
-                active_since=str(
+                login_timestamp=datetime.datetime.timestamp(
                     datetime.datetime.strptime(
                         '{date} {time}'.format(date=date_since, time=time_since),
                         '%Y-%m-%d %H:%M')),
