@@ -1,6 +1,7 @@
 import flask
 
 from lib.components import shared
+from lib.components.config import dhcp_config
 from lib.components.config import fire_info_config
 from lib.components.config import modem_config
 from lib.components.config import remote_config
@@ -22,14 +23,15 @@ def config_list_components_handler() -> flask.Response:
 
 
 def config_get_handler(component: str) -> flask.Response:
-  if component == shared.Component.SYS.value:
-    return shared_handler.json_handler(sys_config.get_sys_config())
-  if component == shared.Component.FIREINFO.value:
-    return shared_handler.json_handler(fire_info_config.get_fire_info_config())
-  if component == shared.Component.MODEM.value:
-    return shared_handler.json_handler(modem_config.get_modem_config())
-  if component == shared.Component.REMOTE.value:
-    return shared_handler.json_handler(remote_config.get_remote_config())
+  dispatcher = {
+    shared.Component.SYS.value: sys_config.get_sys_config,
+    shared.Component.FIREINFO.value: fire_info_config.get_fire_info_config,
+    shared.Component.MODEM.value: modem_config.get_modem_config,
+    shared.Component.REMOTE.value: remote_config.get_remote_config,
+    shared.Component.DHCP.value: dhcp_config.get_dhcp_config,
+  }
+  if component in dispatcher:
+    return shared_handler.json_handler(dispatcher[component]())
 
   try:
     return shared_handler.json_handler(
