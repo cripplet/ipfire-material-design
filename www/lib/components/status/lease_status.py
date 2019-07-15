@@ -33,7 +33,7 @@ class _FixedLeaseShim(shared.ShimObject):
   }
 
   def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
-    lease = _FixedLease(*data.split(','))._asdict()
+    lease = _FixedLease(*data.strip().split(','))._asdict()
     lease['enabled'] = self.BOOL_TRANSLATE_DICT[lease['enabled']]
     return lease
 
@@ -78,7 +78,7 @@ class _LeaseStatusShim(shared.ShimObject):
     with open('config/ipfire_shim.json') as fp:
       ipfire_root = json.loads(fp.read())['ipfire_root']
 
-    fixedleases_fn = '{ipfire_root}/dns/fixleases'.format(ipfire_root=ipfire_root)
+    fixedleases_fn = '{ipfire_root}/dhcp/fixleases'.format(ipfire_root=ipfire_root)
     if os.path.isfile(fixedleases_fn):
       with open(fixedleases_fn) as fp:
         fixedleases_lines = fp.readlines()
