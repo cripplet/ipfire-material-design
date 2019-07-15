@@ -44,7 +44,7 @@ class _DynamicLeaseShim(shared.ShimObject):
       r'lease (?P<ip>(?:\d+(?:\.|:)?)+) {(?:\n.*)*?'
       r'(?:\s+starts \d+ (?P<start>[\/\d\ \:]+);)(?:\n.*)*?'
       r'(?:\s+ends \d+ (?P<end>[\/\d\ \:]+);)(?:\n.*)*?'
-      r'(?:\s+hardware (?P<hardware_type>\w+) (?P<mac>(?:\w+:?)+;))(?:\n.*)*?'
+      r'(?:\s+hardware (?P<hardware_type>\w+) (?P<mac>(?:\w+:?)+);)(?:\n.*)*?'
       r'(?:\s+ uid.*)?(?:\n.*)*?'
       r'(?:\s+client-hostname \"(?P<hostname>\S+)\";)?(?:\n.*)*?\n'
       r'}',
