@@ -20,7 +20,7 @@ class _SSHConfigShim(shared_config.IPFireConfigShim):
     config = super(_SSHConfigShim, self).FromEngine(data)
     return _SSHConfig(
         enable_ssh_keys=config.get('enable_ssh_keys', True),
-        enable_ssh_passwords=config.get('enable_ssh_keys', True),
+        enable_ssh_passwords=config.get('enable_ssh_passwords', True),
         enable_agent_forwarding=config.get('enable_agent_forwarding', False),
         enable_ssh_portfw=config['enable_ssh_portfw'],
         enable_ssh=config['enable_ssh'],
