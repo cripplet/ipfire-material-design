@@ -2,6 +2,7 @@ import flask
 
 from lib.components import shared
 from lib.components.config import dhcp_config
+from lib.components.config import ethernet_config
 from lib.components.config import fire_info_config
 from lib.components.config import modem_config
 from lib.components.config import remote_config
@@ -29,6 +30,7 @@ def config_get_handler(component: str) -> flask.Response:
     shared.Component.MODEM.value: modem_config.get_modem_config,
     shared.Component.REMOTE.value: remote_config.get_remote_config,
     shared.Component.DHCP.value: dhcp_config.get_dhcp_config,
+    shared.Component.ETHERNET.value: ethernet_config.get_ethernet_config,
   }
   if component in dispatcher:
     return shared_handler.json_handler(dispatcher[component]())
