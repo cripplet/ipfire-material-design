@@ -56,6 +56,9 @@ class _DHCPConfigShim(shared_config.IPFireConfigShim):
                 interfaces_regex='|'.join(interfaces)
             ),
             k).groupdict()
+        if interface_property_match['property'] in set([
+            'max_lease_time', 'default_lease_time']):
+          v *= 60
         interfaces_config[
             interface_property_match['interface']
         ][interface_property_match['property']] = v
