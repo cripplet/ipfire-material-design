@@ -7,14 +7,14 @@ from lib.components.config import shared as shared_config
 
 # TODO(cripplet): Add more fields here that may or may not matter.
 _InterfaceConfig = collections.namedtuple('InterfaceConfig', [
-    'dev',
+    'device',
     'mac',
     'description',
     'driver',
     'ip',
     'network_mask',
     'network_ip',
-    'broadcast',
+    'broadcast_ip',
 ])
 
 # TODO(cripplet): Add more fields here.
@@ -24,10 +24,12 @@ _EthernetConfig = collections.namedtuple('EthernetConfig', [
 
 class _EthernetConfigShim(shared_config.IPFireConfigShim):
   INTERFACE_PROPERTY_LOOKUP_TABLE = {
+      'dev': 'device',
       'macaddr': 'mac',
       'address': 'ip',
       'netmask': 'network_mask',
       'netaddress': 'network_ip',
+      'broadcast': 'broadcast_ip',
   }
 
   def FromEngine(self, data: shared.EngineType) -> shared.ConfigType:
