@@ -64,9 +64,9 @@ class _EthernetConfigShim(shared_config.IPFireConfigShim):
       interfaces['red']['ip'] = fp.read().strip()
 
     # Settings validation
-    return _EthernetConfig({
+    return _EthernetConfig(interfaces={
         k: _InterfaceConfig(**v)._asdict() for (k, v) in interfaces.items() if v
-    })
+    })._asdict()
 
 def get_ethernet_config() -> shared.ConfigType:
   with open('config/ipfire_shim.json') as fp:
