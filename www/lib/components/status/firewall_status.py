@@ -89,14 +89,14 @@ class _FirewallRuleShim(shared.ShimObject):
         chain=r['chain'],
         switches={
             'enabled': self.BOOL_TRANSLATE_LOOKUP[r['is_enabled']],
-            'use_src_filter': self.BOOL_TRANSLATE_LOOKUP[r['use_src_filter']],
-            'enabled_srv': self.BOOL_TRANSLATE_LOOKUP[r['is_enabled_srv']],
-            'logged': self.BOOL_TRANSLATE_LOOKUP[r['is_logged']],
-            'scheduled': self.BOOL_TRANSLATE_LOOKUP[r['is_scheduled']],
-            'enabled_nat': self.BOOL_TRANSLATE_LOOKUP[r['is_enabled_nat']],
-            'connection_pool_throttled': self.BOOL_TRANSLATE_LOOKUP[
+            'enable_src_filter': self.BOOL_TRANSLATE_LOOKUP[r['use_src_filter']],
+            'enable_srv': self.BOOL_TRANSLATE_LOOKUP[r['is_enabled_srv']],
+            'enable_logging': self.BOOL_TRANSLATE_LOOKUP[r['is_logged']],
+            'enable_scheduling': self.BOOL_TRANSLATE_LOOKUP[r['is_scheduled']],
+            'enable_nat': self.BOOL_TRANSLATE_LOOKUP[r['is_enabled_nat']],
+            'throttle_connection_pool': self.BOOL_TRANSLATE_LOOKUP[
                 r['is_connection_pool_throttled']],
-            'connection_rate_limited': self.BOOL_TRANSLATE_LOOKUP[
+            'rate_limit_connection': self.BOOL_TRANSLATE_LOOKUP[
                 r['is_connection_rate_limited']],
         },
         src_type=r['src_type'].upper(),
