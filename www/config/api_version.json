@@ -1,7 +1,7 @@
 [
     {
         "major_version": "WTF",
-        "minor_verion": "0.5.0",
+        "minor_version": "0.5.0",
         "ipfire_core": 134,
         "release_notes": "REST API GET functionality implemented for common queries.",
         "timestamp": 1562993581
