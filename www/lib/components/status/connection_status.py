@@ -5,13 +5,21 @@ import socket
 
 from lib.components import shared
 
+_Target = collections.namedtuple('Target', [
+    'ip',
+    'port',
+])
+
+_Route = collections.namedtuple('Route', [
+    'src',
+    'dest',
+])
+
 _ConnectionStatus = collections.namedtuple('ConnectionStatus', [
     'l3_name',
     'l4_name',
-    'src_addr',
-    'src_port',
-    'dest_addr',
-    'dest_port',
+    'request',
+    'response',
     'rx',
     'tx',
     'state',
@@ -44,6 +52,14 @@ class _ConnectionShim(shared.ShimObject):
         int(l4_protocol_number),
         l4_protocol_number).upper()
 
+    # A connection may have up to two routes, one (src, dest) designation
+    # coming in from the request to the route, which may be translated due
+    # to firewall rules into an different (src, dest) response path.
+    routes = [{
+      'src': {'ip': None, 'port': None},
+      'dest': {'ip': None, 'port': None},
+    } for _ in range(2)]
+
     src_addr_entries = [
         e.split('=')[-1] for e in conn_entry_parts if e.startswith('src=')]
     src_port_entries = [
@@ -54,17 +70,36 @@ class _ConnectionShim(shared.ShimObject):
     dest_port_entries = [
         int(e.split('=')[-1]) for e in conn_entry_parts if e.startswith(
             'dport=')]
+
+    for i, ip in enumerate(src_addr_entries):
+      routes[i]['src']['ip'] = ip
+    for i, port in enumerate(src_port_entries):
+      routes[i]['src']['port'] = port
+    for i, ip in enumerate(dest_addr_entries):
+      routes[i]['dest']['ip'] = ip
+    for i, port in enumerate(dest_port_entries):
+      routes[i]['dest']['port'] = port
+
     (tx, rx) = [
         int(e.split('=')[-1]) for e in conn_entry_parts if e.startswith(
             'bytes=')]
 
+    (request_route, response_route) = routes
+
+    request = _Route(
+      src=_Target(**request_route['src'])._asdict(),
+      dest=_Target(**request_route['dest'])._asdict(),
+    )._asdict()
+    response = _Route(
+      src=_Target(**response_route['src'])._asdict(),
+      dest=_Target(**response_route['dest'])._asdict(),
+    )._asdict()
+
     return _ConnectionStatus(
         l3_name=l3_protocol_name,
         l4_name=l4_protocol_name,
-        src_addr=src_addr_entries,
-        src_port=src_port_entries,
-        dest_addr=dest_addr_entries,
-        dest_port=dest_port_entries,
+        request=request,
+        response=response,
         rx=rx,
         tx=tx,
         state=conn_entry_parts[5].upper() if l4_protocol_name == 'TCP' else '',
